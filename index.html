@@ -1,54 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
-        #chatbox { width: 100%; height: 300px; border: 1px solid #ccc; overflow-y: scroll; padding: 10px; }
-        input { width: 80%; padding: 10px; margin-top: 10px; }
-        button { padding: 10px; margin-left: 5px; cursor: pointer; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>💬 AI Chat Vibes 💫</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+      background-size: 400% 400%;
+      animation: gradient 10s ease infinite;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    h2 {
+      margin-top: 30px;
+      font-size: 2em;
+      color: #fff;
+      text-shadow: 2px 2px 5px #000;
+    }
+
+    #chatbox {
+      width: 90%;
+      max-width: 800px;
+      height: 350px;
+      background: rgba(255, 255, 255, 0.85);
+      margin: 30px auto;
+      border-radius: 15px;
+      padding: 20px;
+      overflow-y: auto;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      font-size: 1.1em;
+      text-align: left;
+    }
+
+    input {
+      width: 70%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1em;
+      margin-top: 10px;
+      outline: none;
+    }
+
+    button {
+      padding: 12px 20px;
+      margin-left: 10px;
+      font-size: 1em;
+      background-color: #ff6b81;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ff4757;
+      transform: scale(1.05);
+    }
+
+    b {
+      color: #2f3542;
+    }
+  </style>
 </head>
 <body>
 
-    <h2>Chat with AI</h2>
-    <div id="chatbox"></div>
-    
-    <input type="text" id="userInput" placeholder="Type a message...">
-    <button onclick="sendMessage()">Send</button>
+  <h2>🤖 Chat with AI 💬</h2>
+  <div id="chatbox"></div>
 
-   <script>
-    const apiUrl = "https://0cce-34-124-189-118.ngrok-free.app/chat"; // Ensure this matches your FastAPI endpoint
+  <input type="text" id="userInput" placeholder="Type something cool... ✨" />
+  <button onclick="sendMessage()">🚀 Send</button>
+
+  <script>
+    const apiUrl = "https://0cce-34-124-189-118.ngrok-free.app/chat"; // Replace if URL changes
 
     async function sendMessage() {
-        let userText = document.getElementById("userInput").value;
-        if (!userText) return;
+      const userText = document.getElementById("userInput").value.trim();
+      if (!userText) return;
 
-        document.getElementById("chatbox").innerHTML += "<b>You:</b> " + userText + "<br>";
+      const chatbox = document.getElementById("chatbox");
+      chatbox.innerHTML += `<b>You:</b> ${userText} <br/>`;
 
-        try {
-            const response = await fetch(apiUrl, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ text: userText })  // Ensure FastAPI expects this JSON format
-            });
+      try {
+        const response = await fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: userText })
+        });
 
-            const data = await response.json();
-            document.getElementById("chatbox").innerHTML += "<b>Bot:</b> " + data.response + "<br><br>";
-            document.getElementById("chatbox").scrollTop = document.getElementById("chatbox").scrollHeight;
-        } catch (error) {
-            console.error("Error:", error);
-            document.getElementById("chatbox").innerHTML += "<b>Bot:</b> Sorry, I couldn't connect to the server.<br><br>";
-        }
+        const data = await response.json();
+        chatbox.innerHTML += `<b>Bot:</b> ${data.response} <br/><br/>`;
+        chatbox.scrollTop = chatbox.scrollHeight;
+      } catch (err) {
+        chatbox.innerHTML += `<b>Bot:</b> 😢 Server is napping... Try again later! <br/><br/>`;
+        console.error(err);
+      }
 
-        document.getElementById("userInput").value = "";
+      document.getElementById("userInput").value = "";
     }
-</script>
-
+  </script>
 
 </body>
 </html>
